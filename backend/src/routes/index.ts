@@ -2,7 +2,6 @@ import { Router } from "express";
 import { signupSchema } from "../typechecks/index.js";
 import { prisma } from "../prisma/src/index.js";
 import { generateToken } from "../services/index.js";
-"hi this is hust"
 
 const mainRouter = Router();
 
