@@ -3,8 +3,6 @@ import { signupSchema } from "../typechecks/index.js";
 import { prisma } from "../prisma/src/index.js";
 import { generateToken } from "../services/index.js";
 
-
-
 const mainRouter = Router();
 
 mainRouter.post('/signup', async(req, res)=>{
