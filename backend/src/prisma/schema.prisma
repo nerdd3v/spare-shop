@@ -26,17 +26,57 @@ model Organisation{
   name String @unique
   ownerId String
   owner User @relation(fields: [ownerId], references: [id])
+  Bills BillDetails[]
 }
 
-model Products{
+model Product{
   id String @id @unique @default(cuid())
   name String
   quantity Int
-  imgUrl String
+  imgUrl String ?
   type String ?
+  costPrice Int
+  sellPrice Int ?
+  billItems BillItem[]
 }
 
 model BillDetails{
   id String @unique @id @default(cuid())
   date DateTime @default(now())
+  organisationId String 
+  organisation Organisation @relation(fields: [organisationId], references: [id])
+  totalAmount Int
+  supplierId String
+  supplier Supplier @relation(fields: [supplierId], references: [id])
+  customerId String
+  customer Customer @relation(fields: [customerId], references: [id])
+  items BillItem[]
+}
+
+model BillItem{
+  id String @id @unique @default(cuid())
+  quantity Int
+  price Float
+  productId String
+  product Product @relation(fields: [productId], references: [id])
+  billId String
+  bill BillDetails @relation(fields: [billId], references: [id])
+}
+
+model Customer{
+  id String @id @unique @default(cuid())
+  name String
+  contact String ?
+  email String ?
+  address String ?
+  bills BillDetails[]
+}
+
+model Supplier{
+  id String @id @unique @default(cuid())
+  name String
+  contact String ?
+  email String ?
+  address String ?
+  bills BillDetails[]
 }
