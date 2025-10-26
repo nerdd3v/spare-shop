@@ -4,6 +4,8 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+
+
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -11,7 +13,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://neondb_owner:npg_LEvKJxQAZp79@ep-solitary-brook-a4cv7wbq-pooler.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
 }
 
 model User{
