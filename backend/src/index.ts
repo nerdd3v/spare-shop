@@ -7,8 +7,6 @@ const app = express();
 app.use(express.json());
 
 async function startServer() {
-
-
     await prisma.$connect();
     console.log('Connected to database');
     
@@ -16,7 +14,6 @@ async function startServer() {
       console.log(`Server running on http://localhost:3000`);
     });
 
-  
 }
 
 startServer()
