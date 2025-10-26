@@ -2,7 +2,7 @@ import { Router } from "express";
 import { signupSchema } from "../typechecks/index.js";
 import { prisma } from "../prisma/src/index.js";
 import { generateToken } from "../services/index.js";
-import { hash } from "zod";
+
 
 
 const mainRouter = Router();
