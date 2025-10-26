@@ -26,7 +26,7 @@ model Organisation{
   name String @unique
   ownerId String
   owner User @relation(fields: [ownerId], references: [id])
-  Bills BillDetails[]
+  bills BillDetails[]
 }
 
 model Product{
@@ -42,25 +42,47 @@ model Product{
 
 model BillDetails{
   id String @unique @id @default(cuid())
+  paymentType PaymentType
+  type BillType
   date DateTime @default(now())
   organisationId String 
   organisation Organisation @relation(fields: [organisationId], references: [id])
   totalAmount Int
-  supplierId String
-  supplier Supplier @relation(fields: [supplierId], references: [id])
-  customerId String
-  customer Customer @relation(fields: [customerId], references: [id])
+  supplierId String?
+  supplier Supplier? @relation(fields: [supplierId], references: [id])
+  customerId String?
+  customer Customer? @relation(fields: [customerId], references: [id])
   items BillItem[]
+  cardDetails CardDetail?
+  upiDetails UPIdetail?
+}
+
+model CardDetail{
+  id String @id @unique @default(cuid())
+  accountNumber BigInt
+  accountHolder String
+  cardType CardType
+  bank String
+  billId String @unique
+  Bill BillDetails? @relation(fields: [billId], references: [id], onDelete: Cascade)
+}
+
+model UPIdetail{
+  id String @id @unique @default(cuid())
+  upiId String
+  application String
+  billId String @unique
+  Bill BillDetails? @relation(fields: [billId], references: [id], onDelete: Cascade)
 }
 
 model BillItem{
   id String @id @unique @default(cuid())
   quantity Int
-  price Float
+  price Int
   productId String
-  product Product @relation(fields: [productId], references: [id])
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   billId String
-  bill BillDetails @relation(fields: [billId], references: [id])
+  bill BillDetails @relation(fields: [billId], references: [id], onDelete: Cascade)
 }
 
 model Customer{
@@ -79,4 +101,25 @@ model Supplier{
   email String ?
   address String ?
   bills BillDetails[]
+}
+
+model paymentStatus{
+  id String @id @unique @default(cuid())
+
+}
+
+enum BillType{
+  Sale
+  Purchase
+}
+
+enum PaymentType{
+  Cash
+  UPI
+  Card
+}
+
+enum CardType{
+  Debit
+  Credit
 }
