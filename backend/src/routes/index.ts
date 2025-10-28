@@ -60,7 +60,8 @@ mainRouter.post('signin', async(req, res)=>{
                 username: validateData.data.username
             },
             select:{
-                password
+                password:true,
+                id: true
             }
         })
 
@@ -76,7 +77,7 @@ mainRouter.post('signin', async(req, res)=>{
             })
         }
 
-        const token = generateToken(username, password)
+        const token = generateToken(username, validateUser.id)
 
         return res.status(200).json({
             token,
@@ -90,3 +91,6 @@ mainRouter.post('signin', async(req, res)=>{
     }
 })
 
+mainRouter.post('/organisation', authMW ,async(req, res)=>{
+    const{name, }
+})
