@@ -1,7 +1,9 @@
 import { Router } from "express";
-import { signupSchema } from "../typechecks/index.js";
+import { organisationSchema, signupSchema } from "../typechecks/index.js";
 import { prisma } from "../prisma/src/index.js";
 import { generateToken } from "../services/index.js";
+import { authMW } from "../middlewares/authMW.js";
+import { id } from "zod/locales";
 
 const mainRouter = Router();
 
@@ -92,5 +94,41 @@ mainRouter.post('signin', async(req, res)=>{
 })
 
 mainRouter.post('/organisation', authMW ,async(req, res)=>{
-    const{name, }
+    const{name} = req.body;
+
+    if(!name){
+        return res.status(400).json({
+            message: "orgaisation Name not provided"
+        })
+    }
+    //@ts-ignore
+    const ownerId = req.user
+
+    const validateCredential = organisationSchema.safeParse({name, ownerId});
+
+    if(!validateCredential.success){
+        return res.status(400).json({
+            message: "invalid credentials"
+        })
+    }
+
+    try {
+        const org = await prisma.organisation.create({
+            data:{
+                ownerId : validateCredential.data.ownerId,
+                name: validateCredential.data.name
+            },
+            select:{
+                id: true
+            }
+        })
+        return res.status(200).json({
+            message: "organisation created success",
+            id: `organisation id ${id}`
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "internal server error"
+        })
+    }
 })

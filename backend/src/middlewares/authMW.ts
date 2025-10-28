@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express"
 import jwt, { decode } from 'jsonwebtoken'
 
-const authMW = (req: Request, res: Response, next: NextFunction)=>{
+export const authMW = (req: Request, res: Response, next: NextFunction)=>{
 
     try {
         //@ts-ignore
