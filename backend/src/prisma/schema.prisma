@@ -22,6 +22,8 @@ model Organisation{
   ownerId String @unique
   owner User @relation(fields: [ownerId], references: [id])
   bills BillDetails[]
+  address String?
+  location String?
 }
 
 model Product{

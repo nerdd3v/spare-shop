@@ -94,7 +94,7 @@ mainRouter.post('signin', async(req, res)=>{
 })
 
 mainRouter.post('/organisation', authMW ,async(req, res)=>{
-    const{name} = req.body;
+    const{name, address, location} = req.body;
 
     if(!name){
         return res.status(400).json({
@@ -104,7 +104,7 @@ mainRouter.post('/organisation', authMW ,async(req, res)=>{
     //@ts-ignore
     const ownerId = req.user
 
-    const validateCredential = organisationSchema.safeParse({name, ownerId});
+    const validateCredential = organisationSchema.safeParse({name, ownerId, address, location});
 
     if(!validateCredential.success){
         return res.status(400).json({
@@ -116,10 +116,12 @@ mainRouter.post('/organisation', authMW ,async(req, res)=>{
         const org = await prisma.organisation.create({
             data:{
                 ownerId : validateCredential.data.ownerId,
-                name: validateCredential.data.name
+                name: validateCredential.data.name,
+                address:  validateCredential.data.address || null,
+                location: validateCredential.data.location || null
             },
             select:{
-                id: true
+                id: true,
             }
         })
         return res.status(200).json({

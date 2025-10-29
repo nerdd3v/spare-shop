@@ -7,5 +7,7 @@ export const signupSchema = z.object({
 
 export const organisationSchema = z.object({
     name: z.string(),
-    ownerId: z.string()
+    ownerId: z.string(),
+    address: z.string().optional(),
+    location: z.string().optional()
 })
