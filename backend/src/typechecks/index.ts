@@ -18,5 +18,6 @@ export const productSchema = z.object({
     imgUrl: z.string().optional(),
     type: z.string().optional(),
     costPrice: z.number(),
-    sellPrice: z.number().optional()
+    sellPrice: z.number().optional(),
+    organisationId: z.string()
 })
