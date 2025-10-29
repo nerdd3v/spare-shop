@@ -126,7 +126,7 @@ mainRouter.post('/organisation', authMW ,async(req, res)=>{
         })
         return res.status(200).json({
             message: "organisation created success",
-            id: `organisation id ${id}`
+            id: `organisation id ${org.id}`
         })
     } catch (error) {
         return res.status(500).json({
