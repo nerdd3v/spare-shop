@@ -78,16 +78,23 @@ productRouter.get('/products', authMW, async(req, res)=>{
 
     const validateOwner = await prisma.organisation.findFirst({
         where: {
-            ownerId: userId
+            name: organisation
         },
         select: {
-            id:true
+            id:true,
+            ownerId: true,
         }
     })
 
     if(!validateOwner){
         return res.status(400).json({
             message: "unauthorized access"
+        })
+    }
+
+    if(validateOwner.ownerId !== userId){
+        return res.status(200).json({
+            mmessage: "you are not the owner of the specified organisation"
         })
     }
 
@@ -115,4 +122,65 @@ productRouter.get('/products', authMW, async(req, res)=>{
             message: 'internal server error'
         })
     }
+})
+
+productRouter.get('/product/:id', authMW, async(req, res)=>{
+    //@ts-ignore
+    const userId = req.user;
+    const {productId} = req.params;
+    const organisation = req.body;
+
+    if(!productId){
+        return res.status(400).json({
+            message: 'product Id not found'
+        })
+    }
+
+    const validateOwner = await prisma.organisation.findFirst({
+        where: {
+            name: organisation
+        },
+        select: {
+            id:true,
+            ownerId: true,
+        }
+    })
+
+    if(!validateOwner){
+        return res.status(400).json({
+            message: "unauthorized access"
+        })
+    }
+
+    if(validateOwner.ownerId !== userId){
+        return res.status(200).json({
+            mmessage: "you are not the owner of the specified organisation"
+        })
+    }
+
+     try {
+
+        const response= await prisma.product.findFirst({
+            where: {
+                id: productId 
+            },
+            select:{
+                id: true,
+                name: true,
+                quantity: true,
+                imgUrl: true,
+                type: true,
+                costPrice: true
+            }
+        })
+
+        return res.status(200).json({
+            data: response
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: 'internal server error'
+        })
+    }
+
 })
